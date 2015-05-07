@@ -1,6 +1,6 @@
 package emovix
 
-import java.util.Date;
+import java.util.Date
 
 import twitter4j.Query
 import twitter4j.QueryResult
@@ -8,9 +8,9 @@ import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 
-import com.jordiv.emovix.TwitterQuery
-import com.jordiv.emovix.TwitterQueryResponse
-import com.jordiv.emovix.TwitterUser
+import com.jordiv.emovix.twitter.TwitterQuery
+import com.jordiv.emovix.twitter.TwitterQueryResponse
+import com.jordiv.emovix.twitter.TwitterUser
 
 
 class TwitterQueryExecuterJob {

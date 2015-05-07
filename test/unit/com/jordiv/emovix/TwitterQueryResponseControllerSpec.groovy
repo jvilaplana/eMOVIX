@@ -2,6 +2,9 @@ package com.jordiv.emovix
 
 
 
+import com.jordiv.emovix.twitter.TwitterQueryResponse;
+import com.jordiv.emovix.twitter.TwitterQueryResponseController;
+
 import grails.test.mixin.*
 import spock.lang.*
 

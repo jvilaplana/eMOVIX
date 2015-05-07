@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title><g:layoutTitle default="Grails" /></title>
+<title><g:message code="layout.main.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
 <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
@@ -33,15 +33,15 @@
 					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"> <img alt="University of Ulster"
-					src="${resource(dir: 'images', file: 'ulster_logo.png')}" />
+				<a class="navbar-brand" href="#"> <img
+					src="${assetPath(src: 'logo_udl_small.png')}" />
 				</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li class="${params?.controller == null ? 'active' : ''}"><a href="${createLink(uri: '/', absolute: true)}">Home</a></li>
+					<li class="${params?.controller == null ? 'active' : ''}"><a href="${createLink(uri: '/', absolute: true)}"><g:message code="layout.main.home" /></a></li>
 					<li class="${params?.controller == 'twitterQuery' ? 'active' : ''}"><g:link controller="twitterQuery">Twitter Query</g:link></li>
 				</ul>
 				<%--

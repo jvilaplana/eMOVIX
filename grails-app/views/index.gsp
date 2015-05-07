@@ -8,12 +8,12 @@
 	<div class="container">
 		<div class="jumbotron">
 			<h1>
-				<img alt="Ulster University" src="${resource(dir: 'images', file: 'ulster_logo_big.png')}" /> <small>Cyberbullying
-					Detection Project</small>
+				<img alt="Ulster University" src="${assetPath(src: 'logo_udl.png')}" /> <small>#eMOVIX Project</small>
 			</h1>
-			<p>Welcome to the cyberbullying detection project.</p>
+			<p>Welcome to the #eMOVIX project.</p>
 			<sec:ifNotLoggedIn>
 				<p>
+				<img src="" />
 					Please
 					<g:link controller="twitterQuery">log in</g:link>
 					or
@@ -21,20 +21,10 @@
 					to get started.
 				</p>
 			</sec:ifNotLoggedIn>
-			<%--
 			<p>
 				<a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
 			</p>
-			--%>
 		</div>
 	</div>
-	<%-- TODO:
-		<ul>
-			<li>Afegir el altre grup (bullying-improper?)</li>
-			<li>Els altres grups també haurien de sortir a la review</li>
-			<li>Mostrar relacions de buller-victima en un graf</li>
-		</ul> 
-		New type: "bullying, improper"
-	--%>
 </body>
 </html>

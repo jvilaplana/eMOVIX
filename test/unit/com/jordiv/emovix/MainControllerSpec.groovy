@@ -1,5 +1,7 @@
 package com.jordiv.emovix
 
+import com.jordiv.emovix.core.MainController;
+
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

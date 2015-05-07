@@ -1,7 +1,7 @@
-import com.jordiv.emovix.Role
-import com.jordiv.emovix.TwitterQuery
-import com.jordiv.emovix.User
-import com.jordiv.emovix.UserRole
+import com.jordiv.emovix.core.Role
+import com.jordiv.emovix.twitter.TwitterQuery
+import com.jordiv.emovix.core.User
+import com.jordiv.emovix.core.UserRole
 
 class BootStrap {
 

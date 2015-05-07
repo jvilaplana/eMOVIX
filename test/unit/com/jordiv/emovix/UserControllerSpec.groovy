@@ -2,6 +2,9 @@ package com.jordiv.emovix
 
 
 
+import com.jordiv.emovix.core.User;
+import com.jordiv.emovix.core.UserController;
+
 import grails.test.mixin.*
 import spock.lang.*
 

@@ -120,9 +120,9 @@ log4j.main = {
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.jordiv.emovix.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.jordiv.emovix.UserRole'
-grails.plugin.springsecurity.authority.className = 'com.jordiv.emovix.Role'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.jordiv.emovix.core.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.jordiv.emovix.core.UserRole'
+grails.plugin.springsecurity.authority.className = 'com.jordiv.emovix.core.Role'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/':                              ['permitAll'],
 	'/index':                         ['permitAll'],
