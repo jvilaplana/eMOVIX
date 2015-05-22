@@ -42,23 +42,25 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="${params?.controller == null ? 'active' : ''}"><a href="${createLink(uri: '/', absolute: true)}"><g:message code="layout.main.home" /></a></li>
-					<li class="${params?.controller == 'twitterQuery' ? 'active' : ''}"><g:link controller="twitterQuery">Twitter Query</g:link></li>
-				</ul>
-				<%--
-		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-		          <ul class="dropdown-menu" role="menu">
-		            <li><a href="#">Action</a></li>
-		            <li><a href="#">Another action</a></li>
-		            <li><a href="#">Something else here</a></li>
-		            <li class="divider"></li>
-		            <li><a href="#">Separated link</a></li>
-		            <li class="divider"></li>
-		            <li><a href="#">One more separated link</a></li>
-		          </ul>
-		        </li>
-		      </ul>
-		      --%>
+					
+					<li class="dropdown">
+						
+			          	<a href="#" class="dropdown-toggle ${params?.controller == 'twitter' ? 'active' : ''}" data-toggle="dropdown" role="button" aria-expanded="false">
+			          		<g:message code="layout.main.twitter" /> <span class="caret"></span>
+		          		</a>
+						<ul class="dropdown-menu" role="menu">
+							<li class=""><g:link controller="twitter" action="search"><g:message code="layout.main.twitterSearch" /></g:link></li>
+						  	<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+							<li class="divider"></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul>
+			        </li>
+		      	</ul>
+		      
 				<%--
 		      <form class="navbar-form navbar-left" role="search">
 		        <div class="form-group">
