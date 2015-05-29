@@ -7,6 +7,7 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class TwitterMonitorUserController {
+	def twitterService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -29,13 +30,25 @@ class TwitterMonitorUserController {
             notFound()
             return
         }
-
+		
+		def username = params?.userName
+		
+		if(twitterService.isTwitterUsername(username)) {
+			def user = twitterService.getUser(username)
+			twitterMonitorUserInstance?.user = user
+		}
+		else {
+			flash.message = message(code: 'twitter.username.invalid')
+			redirect action: "create", params: [twitterMonitorUserInstance: twitterMonitorUserInstance]
+		}
+		
+		twitterMonitorUserInstance.save flush:true
+		
         if (twitterMonitorUserInstance.hasErrors()) {
+			println twitterMonitorUserInstance.errors
             respond twitterMonitorUserInstance.errors, view:'create'
             return
         }
-
-        twitterMonitorUserInstance.save flush:true
 
         request.withFormat {
             form multipartForm {

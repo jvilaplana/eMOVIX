@@ -1,4 +1,5 @@
 import com.jordiv.emovix.core.Role
+import com.jordiv.emovix.twitter.TwitterMonitorGroup
 import com.jordiv.emovix.twitter.TwitterQuery
 import com.jordiv.emovix.core.User
 import com.jordiv.emovix.core.UserRole
@@ -15,10 +16,11 @@ class BootStrap {
 			User adminUser = new User(username: 'admin', fullName: 'Jordi Vilaplana', password: 'admin1', enabled: true, accountExpired: false, accountLocked: false, passwordExpired: false).save(flush: true)
 			UserRole.create adminUser, adminRole
 			
-			def twitterQuery = TwitterQuery.findByName('Bullying')
-			if(twitterQuery == null) {
-				twitterQuery = new TwitterQuery(name: 'Bullying', query: 'school OR class OR bitch OR you OR your OR gay OR faggot OR dumb OR stupid OR fuck OR shit OR ass OR yourself OR die OR kill OR fruity OR queer OR fat lang:en', count: '100', enabled: false).save(flush: true)
-			}
+			def socialMovementsGroup = new TwitterMonitorGroup(name: 'Moviments socials', description: '').save(flush: true)
+			def politicalPartiesGroup = new TwitterMonitorGroup(name: 'Partits polítics', description: '').save(flush: true)
+			def universitiesGroup = new TwitterMonitorGroup(name: 'Universitats', description: '').save(flush: true)
+			def pressGroup = new TwitterMonitorGroup(name: 'Premsa', description: '').save(flush: true)
+			def institutionsGroup = new TwitterMonitorGroup(name: 'Institucions', description: '').save(flush: true)
 		}
     }
     def destroy = {

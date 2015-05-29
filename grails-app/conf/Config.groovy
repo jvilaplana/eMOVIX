@@ -131,7 +131,11 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':                      ['permitAll'],
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
-	'/**/favicon.ico':                ['permitAll']
+	'/**/favicon.ico':                ['permitAll'],
+	//'/user/create':                   ['permitAll'],
+	//'/user/save':                     ['permitAll'],
+	//'/**':               			  ['IS_AUTHENTICATED_ANONYMOUSLY']
+	'/**':                            ['IS_AUTHENTICATED_FULLY']
 ]
 
 grails.config.locations = [ "classpath:app-config.properties"]

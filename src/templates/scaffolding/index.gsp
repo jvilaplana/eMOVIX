@@ -10,8 +10,13 @@
 	<div class="container-fluid">
 		<h2><g:message code="default.list.label" args="[entityName]" /></h2>
 		<g:if test="\${flash.message}">
-			<div class="message" role="status">\${flash.message}</div>
+			<div class="alert alert-danger" role="alert">\${flash.message}</div>
 		</g:if>
+		<div class="btn-group pull-right" role="group" aria-label="...">
+			<g:link class="btn btn-primary" controller="${domainClass.propertyName}" action="create">
+				<span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" />
+			</g:link>
+		</div>
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -48,6 +53,11 @@
 		</table>
 		<div class="pagination">
 			<g:paginate total="\${${propertyName}Count ?: 0}" />
+		</div>
+		<div class="btn-group pull-right" role="group" aria-label="...">
+			<g:link class="btn btn-primary" controller="${domainClass.propertyName}" action="create">
+				<span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" />
+			</g:link>
 		</div>
 	</div>
 </body>

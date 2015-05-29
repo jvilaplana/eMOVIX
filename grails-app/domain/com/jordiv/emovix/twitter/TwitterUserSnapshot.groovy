@@ -1,16 +1,17 @@
 package com.jordiv.emovix.twitter
 
-class TwitterUser {
+import java.util.Date
+
+class TwitterUserSnapshot {
+	TwitterUser user
 	Date dateCreated
 	Date lastUpdated
 	String biggerProfileImageURL
 	String biggerProfileImageURLHttps
-	Date createdAt
 	String description
 	Integer favouritesCount
 	Integer followersCount
 	Integer friendsCount
-	Long userId
 	String lang
 	String location
 	String miniprofileImageURL
@@ -26,15 +27,8 @@ class TwitterUser {
 	Boolean isProtected
 	Boolean isVerified
 	
-	static hasMany = [snapshots: TwitterUserSnapshot]
+	static belongsTo = [user: TwitterUser]
 	
     static constraints = {
-		timeZone nullable: true, blank: true
-		url nullable: true, blank: true
     }
-	
-	
-	String toString() {
-		screenName
-	}
 }

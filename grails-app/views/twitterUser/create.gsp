@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="layout" content="main">
-	<g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${className}')}" />
+	<g:set var="entityName" value="${message(code: 'twitterUser.label', default: 'TwitterUser')}" />
 </head>
 <body>
 	<div class="container-fluid">
@@ -11,8 +11,8 @@
 				<h2><g:message code="default.create.label" args="[entityName]" /></h2>
 			</div>
 			<div class="panel-body">
-				<g:if test="\${flash.message}">
-					<div class="alert alert-danger" role="alert">\${flash.message}</div>
+				<g:if test="${flash.message}">
+					<div class="alert alert-danger" role="alert">${flash.message}</div>
 				</g:if>
 				<div class="pull-right">
 					<g:link class="btn btn-primary" action="index">
@@ -21,20 +21,20 @@
 				</div>
 				<div class="clearfix"></div>
 				<div class="container-fluid">
-					<g:hasErrors bean="\${${propertyName}}">
+					<g:hasErrors bean="${twitterUserInstance}">
 					<ul class="errors" role="alert">
-						<g:eachError bean="\${${propertyName}}" var="error">
-						<li <g:if test="\${error in org.springframework.validation.FieldError}">data-field-id="\${error.field}"</g:if>><g:message error="\${error}"/></li>
+						<g:eachError bean="${twitterUserInstance}" var="error">
+						<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 						</g:eachError>
 					</ul>
 					</g:hasErrors>
-					<g:form url="[resource:${propertyName}, action:'save']" <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
+					<g:form url="[resource:twitterUserInstance, action:'save']" >
 						<fieldset class="form">
 							<g:render template="form"/>
 						</fieldset>
 						<fieldset class="buttons">
-							<g:submitButton name="create" class="btn btn-primary" value="\${message(code: 'default.button.create.label')}" />
-							<g:link class="btn btn-default" action="index" resource="\${${propertyName}}"><g:message code="default.button.cancel.label" /></g:link>
+							<g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label')}" />
+							<g:link class="btn btn-default" action="index" resource="${twitterUserInstance}"><g:message code="default.button.cancel.label" /></g:link>
 						</fieldset>
 					</g:form>
 				</div>

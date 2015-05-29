@@ -32,16 +32,16 @@ $(function () {
 					<p><g:message code="twitter.searchResults.addToGroup.text1" />: @<span id="twitterUserToMonitor"></span></p>
 					<p><g:message code="twitter.searchResults.addToGroup.text2" />.</p>
 					<div class="well">
-						
+						<g:select name="monitorGroup" from="${monitorGroups}" />
 					</div>
 					<p>
 						<input type="hidden" id="victimUsername" name="victimUsername" value="" />
-					<div id="victimRadio"></div>
+						<div id="victimRadio"></div>
 					</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" id="closeModalBtn">Close</button>
-					<button type="button" class="btn btn-primary" id="confirmBullyingBtn" disabled>Save changes</button>
+					<button type="button" class="btn btn-default" id="closeModalBtn"><g:message code="default.button.cancel.label" /></button>
+					<button type="button" class="btn btn-primary" id="confirmBullyingBtn" disabled><g:message code="default.add.label" args="['']" /></button>
 				</div>
 			</div>
 		</div>

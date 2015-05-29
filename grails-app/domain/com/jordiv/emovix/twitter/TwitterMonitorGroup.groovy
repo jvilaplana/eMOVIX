@@ -10,4 +10,8 @@ class TwitterMonitorGroup {
 	
     static constraints = {
     }
+	
+	String toString() {
+		return name
+	}
 }

@@ -50,13 +50,11 @@
 		          		</a>
 						<ul class="dropdown-menu" role="menu">
 							<li class=""><g:link controller="twitter" action="search"><g:message code="layout.main.twitterSearch" /></g:link></li>
-						  	<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
 							<li class="divider"></li>
-							<li><a href="#">Separated link</a></li>
+							<li class=""><g:link controller="twitterMonitorGroup"><g:message code="layout.main.twitterMonitorGroup" /></g:link></li>
+							<li class=""><g:link controller="twitterMonitorUser"><g:message code="layout.main.twitterMonitorUser" /></g:link></li>
 							<li class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
+							<li class=""><g:link controller="twitterUser"><g:message code="layout.main.twitterUser" /></g:link></li>
 						</ul>
 			        </li>
 		      	</ul>

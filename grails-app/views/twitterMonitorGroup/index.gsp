@@ -12,6 +12,11 @@
 		<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 		</g:if>
+		<div class="btn-group pull-right" role="group" aria-label="...">
+			<g:link class="btn btn-primary" controller="twitterMonitorGroup" action="create">
+				<span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" />
+			</g:link>
+		</div>
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -44,6 +49,11 @@
 		</table>
 		<div class="pagination">
 			<g:paginate total="${twitterMonitorGroupInstanceCount ?: 0}" />
+		</div>
+		<div class="btn-group pull-right" role="group" aria-label="...">
+			<g:link class="btn btn-primary" controller="twitterMonitorGroup" action="create">
+				<span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" />
+			</g:link>
 		</div>
 	</div>
 </body>
