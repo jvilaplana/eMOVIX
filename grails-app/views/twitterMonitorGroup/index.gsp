@@ -20,29 +20,19 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-				
-					<g:sortableColumn property="dateCreated" title="${message(code: 'twitterMonitorGroup.dateCreated.label', default: 'Date Created')}" />
-				
-					<g:sortableColumn property="description" title="${message(code: 'twitterMonitorGroup.description.label', default: 'Description')}" />
-				
-					<g:sortableColumn property="lastUpdated" title="${message(code: 'twitterMonitorGroup.lastUpdated.label', default: 'Last Updated')}" />
-				
 					<g:sortableColumn property="name" title="${message(code: 'twitterMonitorGroup.name.label', default: 'Name')}" />
-				
+					<g:sortableColumn property="description" title="${message(code: 'twitterMonitorGroup.description.label', default: 'Description')}" />
+					<g:sortableColumn property="dateCreated" title="${message(code: 'twitterMonitorGroup.dateCreated.label', default: 'Date Created')}" />
+					<g:sortableColumn property="lastUpdated" title="${message(code: 'twitterMonitorGroup.lastUpdated.label', default: 'Last Updated')}" />
 				</tr>
 			</thead>
 			<tbody>
 			<g:each in="${twitterMonitorGroupInstanceList}" status="i" var="twitterMonitorGroupInstance">
 				<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-				
-					<td><g:link action="show" id="${twitterMonitorGroupInstance.id}">${fieldValue(bean: twitterMonitorGroupInstance, field: "dateCreated")}</g:link></td>
-				
+					<td><g:link action="show" id="${twitterMonitorGroupInstance.id}">${fieldValue(bean: twitterMonitorGroupInstance, field: "name")}</g:link></td>
 					<td>${fieldValue(bean: twitterMonitorGroupInstance, field: "description")}</td>
-				
+					<td>${fieldValue(bean: twitterMonitorGroupInstance, field: "dateCreated")}</td>
 					<td><g:formatDate date="${twitterMonitorGroupInstance.lastUpdated}" /></td>
-				
-					<td>${fieldValue(bean: twitterMonitorGroupInstance, field: "name")}</td>
-				
 				</tr>
 			</g:each>
 			</tbody>

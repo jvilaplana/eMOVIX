@@ -1,4 +1,3 @@
-<%@ page import="com.jordiv.emovix.TwitterQueryResponse" %>
 <!DOCTYPE html>
 <html>
 	<head>

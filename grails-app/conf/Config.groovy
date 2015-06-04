@@ -138,4 +138,5 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**':                            ['IS_AUTHENTICATED_FULLY']
 ]
 
+grails.assets.minifyJs = false
 grails.config.locations = [ "classpath:app-config.properties"]

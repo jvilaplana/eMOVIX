@@ -1,5 +1,3 @@
-
-<%@ page import="com.jordiv.emovix.TwitterQuery" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,7 +21,7 @@
 					<tr>
 						<g:sortableColumn property="name" title="${message(code: 'twitterQuery.name.label', default: 'Name')}" />
 						<g:sortableColumn property="query" title="${message(code: 'twitterQuery.query.label', default: 'Query')}" />
-					
+
 					</tr>
 				</thead>
 				<tbody>

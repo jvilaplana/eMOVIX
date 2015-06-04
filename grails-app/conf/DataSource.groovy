@@ -20,7 +20,7 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
         }
     }
     test {
@@ -30,12 +30,14 @@ environments {
         }
     }
     production {
+		// https://devops.profitbricks.com/tutorials/install-mysql-on-centos-7/
+		// http://tecadmin.net/steps-to-install-tomcat-server-on-centos-rhel/
         dataSource {
 			dbCreate = "update"
 			driverClassName = "com.myorg.jdbcDriverNotExists"
-			url = ""
-			username = ""
-			password = ""
+			url = "jdbc:mysql://localhost:3306/emovix?autoreconnect=true"
+			username = "emovix"
+			password = "em0v1x"
 			
 			//url = 'jdbc:mysql://localhost:3306/emovix_project?autoreconnect=true'
             //dbCreate = "update"

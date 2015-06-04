@@ -6,7 +6,7 @@
 		<g:message code="twitterMonitorUser.group.label" default="Group" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select class="form-control" id="group" name="group.id" from="${com.jordiv.emovix.twitter.TwitterMonitorGroup.list()}" optionKey="id" required="" value="${twitterMonitorUserInstance?.group?.id}" class="many-to-one"/>
+	<g:select class="form-control" id="group" name="group.id" from="${com.jordiv.emovix.twitter.TwitterMonitorGroup.list()}" optionKey="id" required="" value="${params['twitterMonitorGroup.id'] ? params['twitterMonitorGroup.id'] : twitterMonitorUserInstance?.group?.id}" class="many-to-one"/>
 
 </div>
 <%--

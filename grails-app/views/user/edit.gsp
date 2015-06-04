@@ -1,4 +1,4 @@
-<%@ page import="com.jordiv.emovix.User" %>
+<%@ page import="com.jordiv.emovix.core.User" %>
 <!DOCTYPE html>
 <html>
 	<head>

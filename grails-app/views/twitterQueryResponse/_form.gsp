@@ -1,7 +1,3 @@
-<%@ page import="com.jordiv.emovix.TwitterQueryResponse" %>
-
-
-
 <div class="fieldcontain ${hasErrors(bean: twitterQueryResponseInstance, field: 'latitude', 'error')} ">
 	<label for="latitude">
 		<g:message code="twitterQueryResponse.latitude.label" default="Latitude" />

@@ -51,6 +51,7 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.29'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
         test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
+		//compile group: 'com.google.guava', name: 'guava', version: '12.0'
     }
 
     plugins {
@@ -61,7 +62,9 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.8'
-        compile ":asset-pipeline:2.1.5"
+        //compile ":asset-pipeline:2.2.3"
+		//compile ":asset-pipeline:2.1.5"
+		compile ":asset-pipeline:1.9.4"
 		compile ":spring-security-core:2.0-RC4"
 		compile ":twitter-bootstrap:3.3.2.1"
 		compile ":quartz:1.0.2"

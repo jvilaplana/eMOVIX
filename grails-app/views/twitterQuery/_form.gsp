@@ -1,4 +1,3 @@
-<%@ page import="com.jordiv.emovix.TwitterQuery" %>
 <div class="form-group ${hasErrors(bean: twitterQueryInstance, field: 'name', 'error')}">
 	<label for="name">
 		<g:message code="twitterQuery.name.label" default="Name" />
@@ -22,7 +21,7 @@
 </div>
 <div class="checkbox ${hasErrors(bean: twitterQueryInstance, field: 'enabled', 'error')}">
 	<label for="enabled">
-		<g:checkBox name="enabled" value="${twitterQueryInstance?.enabled}" /> 
+		<g:checkBox name="enabled" value="${twitterQueryInstance?.enabled}" />
 		<g:message code="twitterQuery.enabled.label" />
 	</label>
 </div>

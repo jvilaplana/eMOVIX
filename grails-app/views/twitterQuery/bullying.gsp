@@ -1,5 +1,3 @@
-
-<%@ page import="com.jordiv.emovix.TwitterQuery" %>
 <!DOCTYPE html>
 <html>
 	<head>

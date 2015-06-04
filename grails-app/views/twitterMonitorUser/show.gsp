@@ -62,6 +62,10 @@
 						
 					</p>
 					</g:if>
+					
+					<g:link controller="twitterUserSnapshot">
+						Snapshots
+					</g:link>
 				
 				</div>
 				<hr />

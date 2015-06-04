@@ -1,5 +1,3 @@
-
-<%@ page import="com.jordiv.emovix.TwitterQuery"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +23,7 @@
 			});
 
 			$('#closeModalBtn').click(function() { $('#myModal').modal('hide'); });
-			  
+
 			<g:each in="${twitterQueryResponseClassificationList}" status="i" var="c">
 				var c = {};
 				c.responseId = '${c.queryResponse?.id}';
@@ -38,7 +36,7 @@
 			</g:each>
 
 			updateTweet();
-			
+
 			$("#reviewYes").click(function() {
 				sendReview(true);
 			});
@@ -73,7 +71,7 @@
 			  }
 			});
 		}
-		
+
 		function updateTweet() {
 			classifications.splice(0, 1);
 			$("#reviewAmount").html(classifications.length);
@@ -86,13 +84,13 @@
 
 			$("#victimRadio").html('');
 			for(var u in usernames) {
-				$("#victimRadio").html($("#victimRadio").html() + 
+				$("#victimRadio").html($("#victimRadio").html() +
 						'<div class="radio"><label><input type="radio" onclick="updateVictimUsername(\'' + usernames[u] + '\')" id="victim_' + u + '" name="victim" value="' + usernames[u] + '" />' + usernames[u] + '</label></div>');
-				
+
 			}
 
 			$("#victimRadio").html($("#victimRadio").html() + '<div class="radio"><label><input id="victimOtherRadio" type="radio" name="victim" value="-1" />Other</label></div>');
-			
+
 			$('#victimOtherRadio').click(function() {
 				if(!$('#victimOther').length) {
 					$("#victimRadio").append(
@@ -135,7 +133,7 @@
 					});
 				}
 			});
-			
+
 			if(usernames == null || usernames.length == 0) {
 				$('#victimOtherRadio').click();
 			}

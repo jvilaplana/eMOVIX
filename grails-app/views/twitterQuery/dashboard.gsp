@@ -1,5 +1,3 @@
-
-<%@ page import="com.jordiv.emovix.TwitterQuery" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,7 +9,7 @@
 		<script type="text/javascript" src="${resource(dir: 'js/highcharts', file: 'highcharts-more.js')}"></script>
 		<script type="text/javascript" src="${resource(dir: 'js/highcharts/modules', file: 'solid-gauge.js')}"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization"></script>
-		
+
 		<script type="text/javascript">
 		$(function () {
 		    $('#chart-distribution').highcharts({
@@ -221,7 +219,7 @@
 		            }]
 		        });
 
-			         
+
 		});
 		</script>
 	</head>

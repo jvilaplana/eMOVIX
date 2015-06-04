@@ -20,29 +20,19 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-				
-					<g:sortableColumn property="dateCreated" title="${message(code: 'twitterMonitorUser.dateCreated.label', default: 'Date Created')}" />
-				
-					<th><g:message code="twitterMonitorUser.group.label" default="Group" /></th>
-				
-					<g:sortableColumn property="lastUpdated" title="${message(code: 'twitterMonitorUser.lastUpdated.label', default: 'Last Updated')}" />
-				
-					<th><g:message code="twitterMonitorUser.user.label" default="User" /></th>
-				
+					<th><g:message code="twitterMonitorUser.user.label" /></th>
+					<th><g:message code="twitterMonitorUser.group.label" /></th>
+					<g:sortableColumn property="dateCreated" title="${message(code: 'default.dateCreated.label')}" />
+					<g:sortableColumn property="lastUpdated" title="${message(code: 'default.lastUpdated.label')}" />
 				</tr>
 			</thead>
 			<tbody>
 			<g:each in="${twitterMonitorUserInstanceList}" status="i" var="twitterMonitorUserInstance">
 				<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-				
-					<td><g:link action="show" id="${twitterMonitorUserInstance.id}">${fieldValue(bean: twitterMonitorUserInstance, field: "dateCreated")}</g:link></td>
-				
+					<td><g:link action="show" id="${twitterMonitorUserInstance.id}">@${fieldValue(bean: twitterMonitorUserInstance, field: "user")}</g:link></td>
 					<td>${fieldValue(bean: twitterMonitorUserInstance, field: "group")}</td>
-				
+					<td>${fieldValue(bean: twitterMonitorUserInstance, field: "dateCreated")}</td>
 					<td><g:formatDate date="${twitterMonitorUserInstance.lastUpdated}" /></td>
-				
-					<td>${fieldValue(bean: twitterMonitorUserInstance, field: "user")}</td>
-				
 				</tr>
 			</g:each>
 			</tbody>

@@ -1,4 +1,4 @@
-<%@ page import="com.jordiv.emovix.User"%>
+<%@ page import="com.jordiv.emovix.core.User"%>
 
 <div class="form-group ${hasErrors(bean: userInstance, field: 'username', 'error')} required">
 	<label for="username">Email address <span class="required-indicator">*</span></label> <input type="email"

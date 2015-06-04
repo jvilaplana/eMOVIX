@@ -1,5 +1,3 @@
-
-<%@ page import="com.jordiv.emovix.TwitterQuery"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -127,7 +125,7 @@ text {
 				new google.maps.LatLng(${gl[0]}, ${gl[1]}),
 			</g:each>
 		];
-		
+
 		function initialize() {
 		  var mapOptions = {
 		    //zoom: 2,
@@ -136,11 +134,11 @@ text {
     		center: new google.maps.LatLng(52, 11),
 		    mapTypeId: google.maps.MapTypeId.ROADMAP
 		  };
-		
+
 		  gmap = new google.maps.Map(document.getElementById('geoMap'), mapOptions);
-		
+
 		  var pointArray = new google.maps.MVCArray(taxiData);
-		
+
 		  heatmap = new google.maps.visualization.HeatmapLayer({
 		    data: pointArray
 		  });
@@ -153,11 +151,11 @@ text {
 		--%>
 		  heatmap.setMap(gmap);
 		}
-		
+
 		function toggleHeatmap() {
 		  heatmap.setMap(heatmap.getMap() ? null : gmap);
 		}
-		
+
 		function changeGradient() {
 		  var gradient = [
 		  'rgba(0, 255, 255, 0)',
@@ -177,20 +175,20 @@ text {
 		  ]
 		  heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
 		}
-		
+
 		function changeRadius() {
 		  heatmap.set('radius', heatmap.get('radius') ? null : 20);
 		}
-		
+
 		function changeOpacity() {
 		  heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
 		}
-		
+
 		initialize();
 		changeRadius();
 
-		
-	    
+
+
 		});
 		</script>
 </head>
