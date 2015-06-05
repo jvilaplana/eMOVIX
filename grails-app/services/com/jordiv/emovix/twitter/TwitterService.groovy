@@ -78,6 +78,47 @@ class TwitterService {
 		return twitterUser
 	}
 	
+	def getUserSnapshot(TwitterUser twitterUser) {
+		log.debug "Initiating snapshot of user " + twitterUser.screenName
+		println "Initiating snapshot of user " + twitterUser.screenName
+		if(twitterUser == null) return twitterUser
+		
+		Twitter twitter = TwitterFactory.getSingleton()
+		User user = twitter.showUser(twitterUser.screenName)
+		TwitterUserSnapshot userSnapshot = null
+		
+		if(user != null) {
+			userSnapshot = new TwitterUserSnapshot()
+			userSnapshot.biggerProfileImageURL = user.getBiggerProfileImageURL()
+			userSnapshot.biggerProfileImageURLHttps = user.getBiggerProfileImageURLHttps()
+			userSnapshot.description = user.getDescription()
+			userSnapshot.favouritesCount = user.getFavouritesCount()
+			userSnapshot.followersCount = user.getFollowersCount()
+			userSnapshot.friendsCount = user.getFriendsCount()
+			userSnapshot.lang = user.getLang()
+			userSnapshot.location = user.getLocation()
+			userSnapshot.miniprofileImageURL = user.getMiniProfileImageURL()
+			userSnapshot.miniProfileImageURLHttps = user.getMiniProfileImageURLHttps()
+			userSnapshot.name = user.getName()
+			userSnapshot.screenName = user.getScreenName()
+			userSnapshot.getStatusesCount = user.getStatusesCount()
+			userSnapshot.timeZone = user.getTimeZone()
+			userSnapshot.url = user.getURL()
+			userSnapshot.isDefaultProfile = user.isDefaultProfile()
+			userSnapshot.isDefaultProfileImage = user.isDefaultProfileImage()
+			userSnapshot.isGeoEnabled = user.isGeoEnabled()
+			userSnapshot.isProtected = user.isProtected()
+			userSnapshot.isVerified = user.isVerified()
+			userSnapshot.user = twitterUser
+			userSnapshot.save flush: true, failOnError: true
+			
+			twitterUser.snapshots.add userSnapshot
+			twitterUser.save flush: true, failOnError: true
+		}
+		
+		return userSnapshot
+	}
+	
 	def isCachedUser(String screenName) {
 		return TwitterUser.findByScreenName(screenName)
 	}

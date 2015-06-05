@@ -1,23 +1,33 @@
 package com.jordiv.emovix.twitter
 
-
-
 class TwitterMonitorJob {
-	def twitterService
+	TwitterService twitterService
 	
     static triggers = {
-      simple repeatInterval: 5000l // execute job once in 5 seconds
+      simple repeatInterval: 10000l // execute job once in 10 seconds
     }
 
 	// Limit: 180 requests cada 898 segons --> 1 request cada 5 segons
+	// Affected endpoint: /users/show/:id
     def execute() {
         // execute job
-		def twitterMonitorUserList = TwitterMonitorUser.list()
+		def twitterMonitorUserList = TwitterMonitorUser.list(sort: "lastUpdated", max: 1)
 		
 		for(TwitterMonitorUser monitorUser : twitterMonitorUserList) {
-			TwitterUser user = monitorUser.user
 			
+			def yesterday = (new Date()) - 1
 			
+			// If the last update was performed 1 day ago or more ...
+			if(yesterday > monitorUser.lastUpdated) {
+				TwitterUser user = monitorUser.user
+				createUserSnapshot(user)
+				monitorUser.lastUpdated = new Date()
+				monitorUser.save flush: true
+			}
 		}
     }
+	
+	def createUserSnapshot(TwitterUser user) {
+		twitterService.getUserSnapshot(user)
+	}
 }

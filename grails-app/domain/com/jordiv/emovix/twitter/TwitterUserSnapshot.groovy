@@ -30,5 +30,7 @@ class TwitterUserSnapshot {
 	static belongsTo = [user: TwitterUser]
 	
     static constraints = {
+		timeZone nullable: true, blank: true
+		url nullable: true, blank: true
     }
 }
