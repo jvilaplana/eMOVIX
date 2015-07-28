@@ -1,10 +1,19 @@
 package com.jordiv.emovix.twitter
 
 import grails.transaction.Transactional
+import twitter4j.FilterQuery
+import twitter4j.Paging
 import twitter4j.RateLimitStatus
+import twitter4j.StallWarning
+import twitter4j.Status
+import twitter4j.StatusAdapter
+import twitter4j.StatusDeletionNotice
+import twitter4j.StatusListener
 import twitter4j.Twitter
-import twitter4j.TwitterFactory
 import twitter4j.TwitterException
+import twitter4j.TwitterFactory
+import twitter4j.TwitterStream
+import twitter4j.TwitterStreamFactory
 import twitter4j.User
 
 @Transactional
@@ -63,7 +72,7 @@ class TwitterService {
 			twitterUser.miniProfileImageURLHttps = user.getMiniProfileImageURLHttps()
 			twitterUser.name = user.getName()
 			twitterUser.screenName = user.getScreenName()
-			twitterUser.getStatusesCount = user.getStatusesCount()
+			twitterUser.statusesCount = user.getStatusesCount()
 			twitterUser.timeZone = user.getTimeZone()
 			twitterUser.url = user.getURL()
 			twitterUser.isDefaultProfile = user.isDefaultProfile()
@@ -84,7 +93,13 @@ class TwitterService {
 		if(twitterUser == null) return twitterUser
 		
 		Twitter twitter = TwitterFactory.getSingleton()
-		User user = twitter.showUser(twitterUser.screenName)
+		User user = null
+		try {
+			user = twitter.showUser(twitterUser.screenName)
+		} catch(TwitterException e) {
+			log.error "Twitter user " + twitterUser.screenName + " could not be found on Twitter!"
+		}
+		
 		TwitterUserSnapshot userSnapshot = null
 		
 		if(user != null) {
@@ -101,7 +116,7 @@ class TwitterService {
 			userSnapshot.miniProfileImageURLHttps = user.getMiniProfileImageURLHttps()
 			userSnapshot.name = user.getName()
 			userSnapshot.screenName = user.getScreenName()
-			userSnapshot.getStatusesCount = user.getStatusesCount()
+			userSnapshot.statusesCount = user.getStatusesCount()
 			userSnapshot.timeZone = user.getTimeZone()
 			userSnapshot.url = user.getURL()
 			userSnapshot.isDefaultProfile = user.isDefaultProfile()
@@ -119,6 +134,22 @@ class TwitterService {
 		return userSnapshot
 	}
 	
+	def getUserTweets(TwitterUser user) {
+		Twitter twitter = TwitterFactory.getSingleton()
+		
+		Paging paging = new Paging(1, 200);
+		//List<Status> statuses = twitter.getUserTimeline(user.userId, paging);
+		//List<Status> statuses = twitter.getHomeTimeline();
+		List<Status> statuses = twitter.getUserTimeline("vjordi", paging);
+		/*
+		System.out.println("Showing home timeline.");
+		for (Status status : statuses) {
+			System.out.println(status.getUser().getName() + ":" +
+							   status.getText());
+		}
+		*/
+	}
+	
 	def isCachedUser(String screenName) {
 		return TwitterUser.findByScreenName(screenName)
 	}
@@ -131,5 +162,61 @@ class TwitterService {
 		} catch(TwitterException e) {
 			return false
 		}
+	}
+	
+	/**
+	 * Saves a tweet from the Twitter4j API to the database
+	 */
+	def saveTwitterStatus(Status status) {
+		println "Going to save a twitterStatus!"
+		// Check if this tweet already exists in the database
+		TwitterStatus twitterStatus = TwitterStatus.findByStatusId(status.getId())
+		if(twitterStatus != null) return
+		
+		twitterStatus = new TwitterStatus()
+		
+		twitterStatus.contributors = status.getContributors()
+		twitterStatus.createdAt = status.getCreatedAt()
+		twitterStatus.favoriteCount = status.getFavoriteCount()
+		
+		if(status.getGeoLocation() != null) {
+			twitterStatus.geoLocation = new TwitterGeoLocation(
+				latitude: status.getGeoLocation().getLatitude(),
+				longitude: status.getGeoLocation().getLongitude()).save(flush: true)
+		}
+		
+		twitterStatus.statusId = status.getId()
+		twitterStatus.inReplyToScreenName = status.getInReplyToScreenName()
+		twitterStatus.inReplyToStatusId = status.getInReplyToStatusId()
+		twitterStatus.inReplyToUserId = status.getInReplyToUserId()
+		twitterStatus.lang = status.getLang()
+		//TODO save twitterStatus.place
+		//TODO save twitterStatus.quotedStatus
+		twitterStatus.quotedStatusId = status.getQuotedStatusId()
+		twitterStatus.retweetCount = status.getRetweetCount()
+		//TODO save twitterStatus.retweetedStatus
+		
+		if(status.getScopes() != null) {
+			twitterStatus.scopes = new TwitterScopes(placeIds: status.getScopes().getPlaceIds())
+		}
+		
+		twitterStatus.source = status.getSource()
+		twitterStatus.text = status.getText()
+		
+		if(this.isCachedUser(status.getUser().getScreenName())) {
+			twitterStatus.twitterUser = TwitterUser.findByScreenName(status.getUser().getScreenName())
+		}
+		else {
+			twitterStatus.twitterUser = this.getUser(status.getUser().getScreenName())
+		}
+		
+		twitterStatus.withheldInCountries = status.getWithheldInCountries()
+		twitterStatus.isFavorited = status.isFavorited()
+		twitterStatus.isPossiblySensitive = status.isPossiblySensitive()
+		twitterStatus.isRetweet = status.isRetweet()
+		twitterStatus.isRetweeted = status.isRetweeted()
+		twitterStatus.isTruncated = status.isTruncated()
+		
+		twitterStatus.save flush: true, failOnError: true
 	}
 }

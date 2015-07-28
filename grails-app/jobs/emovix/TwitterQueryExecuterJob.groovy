@@ -68,7 +68,7 @@ class TwitterQueryExecuterJob {
 					twitterUser.miniProfileImageURLHttps = status.getUser().getMiniProfileImageURLHttps()
 					twitterUser.name = status.getUser().getName()
 					twitterUser.screenName = status.getUser().getScreenName()
-					twitterUser.getStatusesCount = status.getUser().getStatusesCount()
+					twitterUser.statusesCount = status.getUser().getStatusesCount()
 					twitterUser.timeZone = status.getUser().getTimeZone()
 					twitterUser.url = status.getUser().getURL()
 					twitterUser.isDefaultProfile = status.getUser().isDefaultProfile()

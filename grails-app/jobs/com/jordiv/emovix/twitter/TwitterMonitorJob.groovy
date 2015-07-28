@@ -21,6 +21,7 @@ class TwitterMonitorJob {
 			if(yesterday > monitorUser.lastUpdated) {
 				TwitterUser user = monitorUser.user
 				createUserSnapshot(user)
+				getUserTweets(user)
 				monitorUser.lastUpdated = new Date()
 				monitorUser.save flush: true
 			}
@@ -28,6 +29,11 @@ class TwitterMonitorJob {
     }
 	
 	def createUserSnapshot(TwitterUser user) {
+		println "Going for a snapshot of user " + user
 		twitterService.getUserSnapshot(user)
+	}
+	
+	def getUserTweets(TwitterUser user) {
+		twitterService.getUserTweets(user)
 	}
 }

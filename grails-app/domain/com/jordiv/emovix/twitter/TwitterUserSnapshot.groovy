@@ -18,7 +18,7 @@ class TwitterUserSnapshot {
 	String miniProfileImageURLHttps
 	String name
 	String screenName
-	Integer getStatusesCount
+	Integer statusesCount
 	String timeZone
 	String url
 	Boolean isDefaultProfile

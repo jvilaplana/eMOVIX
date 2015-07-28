@@ -73,12 +73,12 @@
 	<g:field name="friendsCount" type="number" value="${twitterUserInstance.friendsCount}" required=""/>
 
 </div>
-<div class="form-group ${hasErrors(bean: twitterUserInstance, field: 'getStatusesCount', 'error')} required">
-	<label for="getStatusesCount">
-		<g:message code="twitterUser.getStatusesCount.label" default="Get Statuses Count" />
+<div class="form-group ${hasErrors(bean: twitterUserInstance, field: 'statusesCount', 'error')} required">
+	<label for="statusesCount">
+		<g:message code="twitterUser.statusesCount.label" default="Get Statuses Count" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="getStatusesCount" type="number" value="${twitterUserInstance.getStatusesCount}" required=""/>
+	<g:field name="statusesCount" type="number" value="${twitterUserInstance.statusesCount}" required=""/>
 
 </div>
 <div class="form-group ${hasErrors(bean: twitterUserInstance, field: 'isDefaultProfile', 'error')} ">

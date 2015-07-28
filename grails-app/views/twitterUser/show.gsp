@@ -117,11 +117,11 @@
 					</p>
 					</g:if>
 				
-					<g:if test="${twitterUserInstance?.getStatusesCount}">
+					<g:if test="${twitterUserInstance?.statusesCount}">
 					<p>
-						<strong><g:message code="twitterUser.getStatusesCount.label" default="Get Statuses Count" />: </strong>
+						<strong><g:message code="twitterUser.statusesCount.label" default="Get Statuses Count" />: </strong>
 						
-							<span class="property-value" aria-labelledby="getStatusesCount-label"><g:fieldValue bean="${twitterUserInstance}" field="getStatusesCount"/></span>
+							<span class="property-value" aria-labelledby="statusesCount"><g:fieldValue bean="${twitterUserInstance}" field="statusesCount"/></span>
 						
 					</p>
 					</g:if>

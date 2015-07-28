@@ -14,6 +14,15 @@
 <link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
 <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
 <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
+
+<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+<script type="text/javascript">
+    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":null,"theme":"dark-bottom"};
+</script>
+<script type="text/javascript" src="//s3.amazonaws.com/cc.silktide.com/cookieconsent.latest.min.js"></script>
+<!-- End Cookie Consent plugin -->
+
+
 <%--<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.min.css')}" />
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-theme.min.css')}" />--%>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'global.css')}" />

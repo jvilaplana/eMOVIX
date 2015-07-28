@@ -71,4 +71,8 @@ class TwitterController {
 		
 		render(view: "searchResults", model: [results: results, nextQuery: nextQuery, monitorGroups: TwitterMonitorGroup.list()])
 	}
+	
+	def stream() {
+		twitterService.getStream()
+	}
 }

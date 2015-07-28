@@ -90,11 +90,11 @@
 					</p>
 					</g:if>
 				
-					<g:if test="${twitterUserSnapshotInstance?.getStatusesCount}">
+					<g:if test="${twitterUserSnapshotInstance?.statusesCount}">
 					<p>
-						<strong><g:message code="twitterUserSnapshot.getStatusesCount.label" default="Get Statuses Count" />: </strong>
+						<strong><g:message code="twitterUserSnapshot.statusesCount.label" default="Get Statuses Count" />: </strong>
 						
-							<span class="property-value" aria-labelledby="getStatusesCount-label"><g:fieldValue bean="${twitterUserSnapshotInstance}" field="getStatusesCount"/></span>
+							<span class="property-value" aria-labelledby="statusesCount-label"><g:fieldValue bean="${twitterUserSnapshotInstance}" field="statusesCount"/></span>
 						
 					</p>
 					</g:if>

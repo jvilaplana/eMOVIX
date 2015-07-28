@@ -49,12 +49,12 @@
 	<g:field name="friendsCount" type="number" value="${twitterUserSnapshotInstance.friendsCount}" required=""/>
 
 </div>
-<div class="form-group ${hasErrors(bean: twitterUserSnapshotInstance, field: 'getStatusesCount', 'error')} required">
-	<label for="getStatusesCount">
-		<g:message code="twitterUserSnapshot.getStatusesCount.label" default="Get Statuses Count" />
+<div class="form-group ${hasErrors(bean: twitterUserSnapshotInstance, field: 'statusesCount', 'error')} required">
+	<label for="statusesCount">
+		<g:message code="twitterUserSnapshot.statusesCount.label" default="Get Statuses Count" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="getStatusesCount" type="number" value="${twitterUserSnapshotInstance.getStatusesCount}" required=""/>
+	<g:field name="statusesCount" type="number" value="${twitterUserSnapshotInstance.statusesCount}" required=""/>
 
 </div>
 <div class="form-group ${hasErrors(bean: twitterUserSnapshotInstance, field: 'isDefaultProfile', 'error')} ">
