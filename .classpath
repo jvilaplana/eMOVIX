@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="lib/tika-app-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/twitter4j-core-4.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/twitter4j-stream-4.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/detectlanguage-1.0.5.jar"/>
 	<classpathentry excluding="BuildConfig.groovy|*DataSource.groovy|UrlMappings.groovy|Config.groovy|BootStrap.groovy|spring/resources.groovy" kind="src" path=".link_to_grails_plugins/asset-pipeline-1.9.4/grails-app/conf">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>

@@ -75,7 +75,12 @@ class TwitterController {
 	
 	def visualizeStream() {
 		def twitterStatusCount = TwitterStatus.count()
-		render(view: "visualizeStream", model: [twitterStatusCount: twitterStatusCount])
+		
+		def catalanTweets = TwitterStatusLanguageDetection.findAllByLanguage("ca")
+		render(view: "visualizeStream", model: [
+			twitterStatusCount: twitterStatusCount, 
+			catalanTweets: catalanTweets, 
+			catalanTweetsCount: catalanTweets.size()])
 	}
 	
 	def ajaxUpdateData() {
@@ -88,5 +93,19 @@ class TwitterController {
 		data.userCount = twitterUserCount
 		render data as JSON
 		return
+	}
+	
+	def catalanTweets() {
+		def twitterStatusCount = TwitterStatusLanguageDetection.count()
+		def catalanTweets = TwitterStatusLanguageDetection.findAllByLanguage("ca")
+		
+		def catalanTweets2 = TwitterStatusLanguageDetection.findAllByLanguageAndSource("ca", "detectlanguage")
+		
+		render(view: "catalanTweets", model: [
+			twitterStatusCount: twitterStatusCount,
+			catalanTweets: catalanTweets,
+			catalanTweets2: catalanTweets2,
+			catalanTweets2Count: catalanTweets2.size(),
+			catalanTweetsCount: catalanTweets.size()])
 	}
 }

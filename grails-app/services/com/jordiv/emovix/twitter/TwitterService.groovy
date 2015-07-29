@@ -15,6 +15,8 @@ import twitter4j.TwitterFactory
 import twitter4j.TwitterStream
 import twitter4j.TwitterStreamFactory
 import twitter4j.User
+import com.detectlanguage.DetectLanguage
+import com.detectlanguage.Result
 
 @Transactional
 class TwitterService {
@@ -318,22 +320,37 @@ class TwitterService {
 	 * @return
 	 */
 	def detectLanguage(TwitterStatus status) {
+		
+		if(status == null) return
+		
 		// Language detection using Apache Tika
+		// http://svn.apache.org/viewvc/tika/trunk/tika-core/src/main/resources/org/apache/tika/language/tika.language.properties?view=markup
 		LanguageIdentifier li = new LanguageIdentifier(status.getText());
 		//println li.getSupportedLanguages()
 		
 		TwitterStatusLanguageDetection languageDetection = new TwitterStatusLanguageDetection()
 		
+		languageDetection.status = status
 		languageDetection.source = "tika"
 		languageDetection.language = li.getLanguage()
 		languageDetection.isReasonablyCertain = li.isReasonablyCertain()
 		languageDetection.save flush: true, failOnError: true
 		
-		/*
-		if (li.isReasonablyCertain())
-			render text + " -!!-> " + li.getLanguage();
-		else
-			render text + " --> " + li.getLanguage();
-		*/
+		if(languageDetection.language == "ca") {
+			// Language detection using Detect Language API
+			//TODO Move the apiKey to a config file
+			DetectLanguage.apiKey = "466c93794a58215689e299c33e8d7794"
+			List<Result> results = DetectLanguage.detect(status.getText());
+			
+			for(Result result : results) {
+				languageDetection = new TwitterStatusLanguageDetection()
+				languageDetection.status = status
+				languageDetection.source = "detectlanguage"
+				languageDetection.language = result.language
+				languageDetection.isReasonablyCertain = result.isReliable
+				languageDetection.confidence = result.confidence
+				languageDetection.save flush: true, failOnError: true
+			}
+		}
 	}
 }

@@ -2,20 +2,66 @@
 <html>
 <head>
 <meta name="layout" content="main" />
+<style>
+blockquote.twitter-tweet {
+  display: inline-block;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 16px;
+  border-color: #eee #ddd #bbb;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  margin: 10px 5px;
+  padding: 16px 16px 16px 16px;
+  border-bottom: 1px solid #e1e8ed;
+  cursor: pointer;
+}
+ 
+blockquote.twitter-tweet p {
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+}
+ 
+blockquote.twitter-tweet a {
+  color: inherit;
+  font-weight: normal;
+  text-decoration: none;
+  outline: 0 none;
+}
+ 
+blockquote.twitter-tweet a:hover,
+blockquote.twitter-tweet a:focus {
+  text-decoration: underline;
+}
+
+blockquote.twitter-tweet img {
+  float: left;
+  padding-right: 0px;
+  margin-right: 10px;
+  border-radius: 5px;
+  width: 48px;
+  height: 48px;
+}
+</style>
 <script type="text/javascript">
 
 var statusCount = 1;
 var userCount = 1;
+var updateSpeed = 5;
 var isNotFirst = false;
 
 function updateData() {
 	$.get("${g.createLink(controller: 'twitter', action: 'ajaxUpdateData')}", function( data ) {
-		var tweetsPerSecond = data.statusCount - statusCount;
+		var tweetsPerSecond = (data.statusCount - statusCount) / updateSpeed;
 		$( "#tweetsPerSecond" ).html( tweetsPerSecond );
 		statusCount = data.statusCount;
 		$( "#statusCount" ).html( data.statusCount );
 
-		var usersPerSecond = data.userCount - userCount;
+		var usersPerSecond = (data.userCount - userCount) / updateSpeed;
 		$( "#usersPerSecond" ).html( usersPerSecond );
 		userCount = data.userCount;
 		$( "#userCount" ).html( data.userCount );
@@ -40,7 +86,7 @@ function updateData() {
 
 
 $(function () {
-	setInterval(updateData, 1000);
+	setInterval(updateData, updateSpeed * 1000);
 
 	$('#rateChart').highcharts({
 		credits: {
@@ -249,6 +295,21 @@ $(function () {
 		</div>
 		<div id="rateChart"></div>
 		<div id="seriesChart"></div>
+	</div>
+	<div class="well">
+	<p>Catalan tweets count: ${catalanTweetsCount}</p>
+	
+	<g:each in="${catalanTweets}" var="tweet">
+		<blockquote class="twitter-tweet">
+		<img src="${tweet.status.getTwitterUser().getBiggerProfileImageURL()}" />
+		<p>${tweet.status.getText()}</p>
+		- ${tweet.status.getTwitterUser().getName()} (@${tweet.status.getTwitterUser().getScreenName()}) 
+		<a target="_blank" href="https://twitter.com/${tweet.status.getTwitterUser().getScreenName()}/status/${tweet.status.statusId}">
+			<g:formatDate date="${tweet.status.getCreatedAt()}" format="MMM d, yyyy" />
+		</a>
+		</blockquote>
+		
+	</g:each>
 	</div>
 </body>
 </html>
