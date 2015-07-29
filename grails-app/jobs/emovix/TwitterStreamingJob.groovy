@@ -18,7 +18,7 @@ class TwitterStreamingJob {
 
     def execute() {
         // execute job
-		
+		/*
 		if(running) return;
 		running = true;
 		
@@ -63,6 +63,6 @@ class TwitterStreamingJob {
 		filterQuery.locations(locations);
 		twitterStream.filter(filterQuery);
 		
-		
+		*/
     }
 }

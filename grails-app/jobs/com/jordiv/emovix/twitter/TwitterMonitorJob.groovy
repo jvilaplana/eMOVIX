@@ -29,7 +29,6 @@ class TwitterMonitorJob {
     }
 	
 	def createUserSnapshot(TwitterUser user) {
-		println "Going for a snapshot of user " + user
 		twitterService.getUserSnapshot(user)
 	}
 	

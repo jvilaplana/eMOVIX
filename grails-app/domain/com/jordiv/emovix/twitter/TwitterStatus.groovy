@@ -37,7 +37,8 @@ class TwitterStatus {
 		mediaEntities: TwitterMediaEntity, 
 		symbolEntities: TwitterSymbolEntity, 
 		urls: TwitterURL,
-		withheldInCountries: String
+		withheldInCountries: String,
+		languageDetections: TwitterStatusLanguageDetection
 		]
 	
     static constraints = {

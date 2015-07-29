@@ -12,7 +12,7 @@ class TwitterMonitorUser {
 	static belongsTo = [group: TwitterMonitorGroup]
 	
     static constraints = {
-		user nullable: false
+		user nullable: false, unique: true
 		group nullable: false
     }
 	

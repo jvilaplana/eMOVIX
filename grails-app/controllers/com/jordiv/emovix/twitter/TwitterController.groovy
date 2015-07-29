@@ -1,5 +1,6 @@
 package com.jordiv.emovix.twitter
 
+import grails.converters.JSON
 import twitter4j.Query
 import twitter4j.QueryResult
 import twitter4j.RateLimitStatus
@@ -72,7 +73,20 @@ class TwitterController {
 		render(view: "searchResults", model: [results: results, nextQuery: nextQuery, monitorGroups: TwitterMonitorGroup.list()])
 	}
 	
-	def stream() {
-		twitterService.getStream()
+	def visualizeStream() {
+		def twitterStatusCount = TwitterStatus.count()
+		render(view: "visualizeStream", model: [twitterStatusCount: twitterStatusCount])
+	}
+	
+	def ajaxUpdateData() {
+		def data = [:]
+		
+		def twitterStatusCount = TwitterStatus.count()
+		def twitterUserCount = TwitterUser.count()
+		
+		data.statusCount = twitterStatusCount
+		data.userCount = twitterUserCount
+		render data as JSON
+		return
 	}
 }

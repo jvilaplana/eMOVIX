@@ -30,6 +30,8 @@
 <%--<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>--%>
 <%--<script type="text/javascript" src="js/bootstrap.min.js"></script>--%>
 <asset:javascript src="application.js" />
+<script type="text/javascript" src="${resource(dir: 'js/highcharts', file: 'highcharts.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js/highcharts', file: 'highcharts-more.js')}"></script>
 <g:layoutHead />
 </head>
 <body>

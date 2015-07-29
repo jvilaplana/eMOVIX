@@ -10,6 +10,7 @@ import twitter4j.TwitterStreamFactory
 import com.jordiv.emovix.core.Role
 import com.jordiv.emovix.core.User
 import com.jordiv.emovix.core.UserRole
+import com.jordiv.emovix.twitter.CustomStatusListener
 import com.jordiv.emovix.twitter.TwitterMonitorGroup
 import com.jordiv.emovix.twitter.TwitterMonitorUser
 
@@ -42,7 +43,7 @@ class BootStrap {
 		}
 		
 		// Start the Twitter4j streaming
-		getStream()
+		twitterService.getStream()
     }
 	
 	/**
@@ -353,39 +354,4 @@ class BootStrap {
     def destroy = {
     }
 	
-	def getStream() {
-		print "Initializing Twitter Streaming API ... "
-		StatusListener listener = new StatusAdapter() {
-			public void onStatus(Status status) {
-				//println status.getUser().getName() + " : " + status.getText()
-				println status.getUser().getName() + ":"
-				twitterService.saveTwitterStatus(status)
-			}
-			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {}
-			public void onStallWarning(StallWarning stallWarning) {}
-			public void onTrackLimitationNotice(int numberOfLimitedStatuses) {}
-			public void onException(Exception ex) {
-				ex.printStackTrace()
-			}
-		}
-		
-		TwitterStream twitterStream = new TwitterStreamFactory().getInstance()
-		twitterStream.addListener(listener)
-		// sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-		//twitterStream.sample();
-		FilterQuery filterQuery = new FilterQuery()
-		
-		double[][] worldBox
-		worldBox = new double[2][2]
-		
-		worldBox[0][0] = -180
-		worldBox[0][1] = -90
-		worldBox[1][0] = 180
-		worldBox[1][1] = 90
-		
-		filterQuery.locations(worldBox)
-		twitterStream.filter(filterQuery)
-		
-		println "[OK]"
-	}
 }

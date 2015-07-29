@@ -65,17 +65,4 @@ class MainController {
 		
 		render "streaming..."
 	}
-	
-	def tika() {
-		
-		def text = "Doncs avui fa molt de sol i no massa pluja"
-		
-		LanguageIdentifier li = new LanguageIdentifier(text);
-		println li.getSupportedLanguages()
-		if (li.isReasonablyCertain())
-			render text + " -!!-> " + li.getLanguage();
-		else
-			render text + " --> " + li.getLanguage();
-		
-	}
 }

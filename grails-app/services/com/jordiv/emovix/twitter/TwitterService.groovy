@@ -1,13 +1,13 @@
 package com.jordiv.emovix.twitter
 
 import grails.transaction.Transactional
+
+import org.apache.tika.language.LanguageIdentifier
+
 import twitter4j.FilterQuery
 import twitter4j.Paging
 import twitter4j.RateLimitStatus
-import twitter4j.StallWarning
 import twitter4j.Status
-import twitter4j.StatusAdapter
-import twitter4j.StatusDeletionNotice
 import twitter4j.StatusListener
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -55,6 +55,42 @@ class TwitterService {
 		
 		Twitter twitter = TwitterFactory.getSingleton()
 		User user = twitter.showUser(screenName)
+		
+		if(user != null) {
+			twitterUser = new TwitterUser()
+			twitterUser.biggerProfileImageURL = user.getBiggerProfileImageURL()
+			twitterUser.biggerProfileImageURLHttps = user.getBiggerProfileImageURLHttps()
+			twitterUser.createdAt = user.getCreatedAt()
+			twitterUser.description = user.getDescription()
+			twitterUser.favouritesCount = user.getFavouritesCount()
+			twitterUser.followersCount = user.getFollowersCount()
+			twitterUser.friendsCount = user.getFriendsCount()
+			twitterUser.userId = user.getId()
+			twitterUser.lang = user.getLang()
+			twitterUser.location = user.getLocation()
+			twitterUser.miniprofileImageURL = user.getMiniProfileImageURL()
+			twitterUser.miniProfileImageURLHttps = user.getMiniProfileImageURLHttps()
+			twitterUser.name = user.getName()
+			twitterUser.screenName = user.getScreenName()
+			twitterUser.statusesCount = user.getStatusesCount()
+			twitterUser.timeZone = user.getTimeZone()
+			twitterUser.url = user.getURL()
+			twitterUser.isDefaultProfile = user.isDefaultProfile()
+			twitterUser.isDefaultProfileImage = user.isDefaultProfileImage()
+			twitterUser.isGeoEnabled = user.isGeoEnabled()
+			twitterUser.isProtected = user.isProtected()
+			twitterUser.isVerified = user.isVerified()
+			
+			twitterUser.save flush: true, failOnError: true
+		}
+		
+		return twitterUser
+	}
+	
+	def getUser(User user) {
+		TwitterUser twitterUser = TwitterUser.findByScreenName(user.getScreenName())
+		
+		if(twitterUser != null) return twitterUser
 		
 		if(user != null) {
 			twitterUser = new TwitterUser()
@@ -150,8 +186,8 @@ class TwitterService {
 		*/
 	}
 	
-	def isCachedUser(String screenName) {
-		return TwitterUser.findByScreenName(screenName)
+	def isCachedUser(Long userId) {
+		return TwitterUser.findByUserId(userId)
 	}
 	
 	def isTwitterUsername(String username) {
@@ -168,10 +204,15 @@ class TwitterService {
 	 * Saves a tweet from the Twitter4j API to the database
 	 */
 	def saveTwitterStatus(Status status) {
-		println "Going to save a twitterStatus!"
+		//println "Saving a tweet from " + status.getUser().getScreenName()
 		// Check if this tweet already exists in the database
 		TwitterStatus twitterStatus = TwitterStatus.findByStatusId(status.getId())
 		if(twitterStatus != null) return
+		
+		if(status.getText().size() > 255) {
+			log.warn "Status ignored due to abnormal text size (" + status.getText().size() + "): " + status.getText()
+			return
+		}
 		
 		twitterStatus = new TwitterStatus()
 		
@@ -197,17 +238,18 @@ class TwitterService {
 		//TODO save twitterStatus.retweetedStatus
 		
 		if(status.getScopes() != null) {
-			twitterStatus.scopes = new TwitterScopes(placeIds: status.getScopes().getPlaceIds())
+			twitterStatus.scopes = new TwitterScopes(placeIds: status.getScopes().getPlaceIds()).save(flush: true)
 		}
 		
 		twitterStatus.source = status.getSource()
 		twitterStatus.text = status.getText()
 		
-		if(this.isCachedUser(status.getUser().getScreenName())) {
-			twitterStatus.twitterUser = TwitterUser.findByScreenName(status.getUser().getScreenName())
+		if(this.isCachedUser(status.getUser().getId())) {
+			//println "User " + status.getUser().getScreenName() + " is cached, saving to status..."
+			twitterStatus.twitterUser = TwitterUser.findByUserId(status.getUser().getId())
 		}
 		else {
-			twitterStatus.twitterUser = this.getUser(status.getUser().getScreenName())
+			twitterStatus.twitterUser = this.getUser(status.getUser())
 		}
 		
 		twitterStatus.withheldInCountries = status.getWithheldInCountries()
@@ -218,5 +260,80 @@ class TwitterService {
 		twitterStatus.isTruncated = status.isTruncated()
 		
 		twitterStatus.save flush: true, failOnError: true
+		
+		return twitterStatus
+	}
+	
+	
+	def getStream() {
+		print "Initializing Twitter Streaming API ... "
+		/*
+		StatusListener listener = new StatusAdapter() {
+			public void onStatus(Status status) {
+				//println status.getUser().getName() + " : " + status.getText()
+				//println status.getUser().getName() + ":"
+				twitterService.saveTwitterStatus(status)
+			}
+			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {}
+			public void onStallWarning(StallWarning stallWarning) {
+				println "STALL WARNING:"
+				println stallWarning
+			}
+			public void onTrackLimitationNotice(int numberOfLimitedStatuses) {}
+			public void onException(Exception ex) {
+				ex.printStackTrace()
+			}
+		}
+		*/
+		
+		StatusListener listener = new CustomStatusListener()
+		
+		//TwitterStream twitterStream = new TwitterStreamFactory().getInstance()
+		TwitterStream twitterStream = TwitterStreamFactory.getSingleton()
+		
+		twitterStream.clearListeners()
+		twitterStream.addListener(listener)
+		// sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
+		//twitterStream.sample();
+		FilterQuery filterQuery = new FilterQuery()
+		
+		double[][] worldBox
+		worldBox = new double[2][2]
+		
+		worldBox[0][0] = -180
+		worldBox[0][1] = -90
+		worldBox[1][0] = 180
+		worldBox[1][1] = 90
+		
+		filterQuery.locations(worldBox)
+		twitterStream.filter(filterQuery)
+		
+		println "[OK]"
+	}
+	
+	/**
+	 * Try to detect the language of a Twitter message.
+	 * 
+	 * @param status A twitter message object
+	 * @return
+	 */
+	def detectLanguage(TwitterStatus status) {
+		// Language detection using Apache Tika
+		LanguageIdentifier li = new LanguageIdentifier(status.getText());
+		//println li.getSupportedLanguages()
+		
+		TwitterStatusLanguageDetection languageDetection = new TwitterStatusLanguageDetection()
+		
+		languageDetection.source = "tika"
+		languageDetection.language = li.getLanguage()
+		languageDetection.isReasonablyCertain = li.isReasonablyCertain()
+		languageDetection.save flush: true, failOnError: true
+		
+		/*
+		if (li.isReasonablyCertain())
+			render text + " -!!-> " + li.getLanguage();
+		else
+			render text + " --> " + li.getLanguage();
+		*/
 	}
 }

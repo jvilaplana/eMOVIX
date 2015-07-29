@@ -29,6 +29,8 @@ class TwitterUser {
 	static hasMany = [snapshots: TwitterUserSnapshot]
 	
     static constraints = {
+		description nullable: true, blank: true
+		userId unique: true
 		timeZone nullable: true, blank: true
 		url nullable: true, blank: true
     }
