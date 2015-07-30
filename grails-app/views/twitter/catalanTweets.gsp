@@ -55,7 +55,8 @@ blockquote.twitter-tweet img {
 		<p>Total tweets count: ${twitterStatusCount}</p>
 		<h2>Detected by Language Detection API + Apache Tika</h2>
 		<p>Catalan tweets count: ${catalanTweets2Count} 
-			(<g:formatNumber number="${(catalanTweets2Count * 100) / twitterStatusCount }" format="##.##" />%)</p>
+			(<g:formatNumber number="${(catalanTweets2Count * 100) / twitterStatusCount }" format="##.##" />% of total, 
+			<g:formatNumber number="${(catalanTweets2Count * 100) / catalanTweetsCount }" format="##.##" />% of tika)</p>
 		<div class="well">
 			<g:each in="${catalanTweets2}" var="tweet">
 				<blockquote class="twitter-tweet">

@@ -1,5 +1,6 @@
 package com.jordiv.emovix.twitter
 
+import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 
 import org.apache.tika.language.LanguageIdentifier
@@ -15,6 +16,7 @@ import twitter4j.TwitterFactory
 import twitter4j.TwitterStream
 import twitter4j.TwitterStreamFactory
 import twitter4j.User
+
 import com.detectlanguage.DetectLanguage
 import com.detectlanguage.Result
 
@@ -56,7 +58,10 @@ class TwitterService {
 		if(twitterUser != null) return twitterUser
 		
 		Twitter twitter = TwitterFactory.getSingleton()
-		User user = twitter.showUser(screenName)
+		User user = null
+		try {
+		user = twitter.showUser(screenName)
+		} catch(Exception e) {}
 		
 		if(user != null) {
 			twitterUser = new TwitterUser()
@@ -83,6 +88,26 @@ class TwitterService {
 			twitterUser.isProtected = user.isProtected()
 			twitterUser.isVerified = user.isVerified()
 			
+			twitterUser.save flush: true, failOnError: true
+			
+			def geocoding = TwitterGeocoding.findByLocation(twitterUser.location)
+			if(geocoding == null) {
+				
+				def latLong = getGeocoding(twitterUser.location)
+				
+				if(latLong != -1) {
+					geocoding = new TwitterGeocoding()
+					geocoding.location = twitterUser.location
+					geocoding.longitude = latLong.longitude
+					geocoding.latitude = latLong.latitude
+					geocoding.addToUsers(twitterUser)
+					
+					geocoding.save flush: true, failOnError: true
+				}
+				
+			}
+			
+			twitterUser.geocoding = geocoding
 			twitterUser.save flush: true, failOnError: true
 		}
 		
@@ -119,6 +144,25 @@ class TwitterService {
 			twitterUser.isProtected = user.isProtected()
 			twitterUser.isVerified = user.isVerified()
 			
+			twitterUser.save flush: true, failOnError: true
+			
+			def geocoding = TwitterGeocoding.findByLocation(twitterUser.location)
+			if(geocoding == null) {
+				
+				def latLong = getGeocoding(twitterUser.location)
+				
+				if(latLong != -1) {
+					geocoding = new TwitterGeocoding()
+					geocoding.location = twitterUser.location
+					geocoding.longitude = latLong.longitude
+					geocoding.latitude = latLong.latitude
+					geocoding.addToUsers(twitterUser)
+					
+					geocoding.save flush: true, failOnError: true
+				}
+			}
+			
+			twitterUser.geocoding = geocoding
 			twitterUser.save flush: true, failOnError: true
 		}
 		
@@ -300,14 +344,46 @@ class TwitterService {
 		FilterQuery filterQuery = new FilterQuery()
 		
 		double[][] worldBox
-		worldBox = new double[2][2]
+		double[][] catBox
+		double[][] ukBox
+		double[][] europe
+		double[][] iberia
 		
+		worldBox = new double[2][2]
+		catBox = new double[2][2]
+		ukBox = new double[2][2]
+		europe = new double[2][2]
+		iberia = new double[2][2]
+		
+		
+		//TODO DESAR AL TWEET DE QUINA CAIXA HA VINGUT
 		worldBox[0][0] = -180
 		worldBox[0][1] = -90
 		worldBox[1][0] = 180
 		worldBox[1][1] = 90
 		
-		filterQuery.locations(worldBox)
+		catBox[0][0] = 0
+		catBox[0][1] = 40.42
+		catBox[1][0] = 3.51
+		catBox[1][1] = 43
+		
+		ukBox[0][0] = 2.5
+		ukBox[0][1] = -12.1
+		ukBox[1][0] = 49.3
+		ukBox[1][1] = 63.3
+		
+		europe[0][0] = -45.14
+		europe[0][1] = 23.57
+		europe[1][0] = 42.9346
+		europe[1][1] = 72.7145
+		
+		iberia[0][0] = -12
+		iberia[0][1] = 34
+		iberia[1][0] = 7
+		iberia[1][1] = 45
+		
+		
+		filterQuery.locations(catBox)
 		twitterStream.filter(filterQuery)
 		
 		println "[OK]"
@@ -352,5 +428,36 @@ class TwitterService {
 				languageDetection.save flush: true, failOnError: true
 			}
 		}
+	}
+	
+	def getGeocoding(String location) {
+		if(location == null || location.equals("")) return [latitude: -180, longitude: -90]
+		
+		def rest = new RestBuilder()
+		def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address?key=Fmjtd%7Cluub2g0tng%2Cb2%3Do5-9ubxhz&callback=renderGeocode&location=" + location + "&outFormat=csv&thumbMaps=false&maxResults=1")
+		
+		/*def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address=key=Fmjtd|luub2g0tng,b2=o5-9ubxhz") {
+			json {
+				key ="Fmjtd|luub2g0tng,b2=o5-9ubxhz"
+				inFormat ="json"
+				outFormat ="json"
+				location ="Lleida"
+			}
+		}*/
+		
+		//def list = new XmlParser().parseText(resp.text)
+		
+		//println list.attributes()
+		
+		def test = resp.text
+		test = resp.text.replaceAll("\"", "")
+		test = resp.text.split(",")
+		
+		if(test.size() < 23) return -1
+		
+		def latitude = Double.parseDouble(test[21].replaceAll("\"", ""))
+		def longitude = Double.parseDouble(test[22].replaceAll("\"", ""))
+		
+		return [latitude: latitude, longitude: longitude]
 	}
 }

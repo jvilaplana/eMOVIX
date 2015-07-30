@@ -51,7 +51,7 @@ blockquote.twitter-tweet img {
 
 var statusCount = 1;
 var userCount = 1;
-var updateSpeed = 5;
+var updateSpeed = 1;
 var isNotFirst = false;
 
 function updateData() {

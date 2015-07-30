@@ -1,13 +1,20 @@
 package com.jordiv.emovix.twitter
 
 import grails.converters.JSON
+import grails.plugins.rest.client.RestBuilder
+import twitter4j.Location
 import twitter4j.Query
 import twitter4j.QueryResult
 import twitter4j.RateLimitStatus
+import twitter4j.ResponseList
 import twitter4j.Status
+import twitter4j.Trends
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
+
+import com.detectlanguage.DetectLanguage
+import com.detectlanguage.Result
 
 class TwitterController {
 	def twitterService
@@ -107,5 +114,91 @@ class TwitterController {
 			catalanTweets2: catalanTweets2,
 			catalanTweets2Count: catalanTweets2.size(),
 			catalanTweetsCount: catalanTweets.size()])
+	}
+	
+	def cataloniaTweets() {
+		def geoTweets = TwitterStatus.findAllByGeoLocationIsNotNull()
+		def cataloniaTweets = []
+		
+		
+		for(TwitterStatus status : geoTweets) {
+			def lat = status.geoLocation.latitude
+			def lon = status.geoLocation.longitude
+			if(lat >= 40 && lat <= 43 && lon >= 0 && lon <= 3.6) {
+				cataloniaTweets.add status
+			}
+		}
+		
+		for(TwitterStatus status : cataloniaTweets) {
+			def detectlanguage = false
+			for(TwitterStatusLanguageDetection langDetection : status.languageDetections) {
+				if(langDetection.source.equals("detectlanguage")) {
+					 detectlanguage = true
+					 break
+				}
+			}
+			if(!detectlanguage) {
+				DetectLanguage.apiKey = "466c93794a58215689e299c33e8d7794"
+				List<Result> results = DetectLanguage.detect(status.getText());
+				
+				for(Result result : results) {
+					TwitterStatusLanguageDetection languageDetection = new TwitterStatusLanguageDetection()
+					languageDetection.status = status
+					languageDetection.source = "detectlanguage"
+					languageDetection.language = result.language
+					languageDetection.isReasonablyCertain = result.isReliable
+					languageDetection.confidence = result.confidence
+					languageDetection.save flush: true, failOnError: true
+				}
+			}
+		}
+		
+		def langs = [:]
+		def langsTotal = 0
+		for(TwitterStatus status : cataloniaTweets) {
+			for(TwitterStatusLanguageDetection langDetection : status.languageDetections) {
+				if(langDetection.source.equals("detectlanguage")) {
+					if(!langs.containsKey(langDetection.language)) {
+						langs[langDetection.language] = 0
+					}
+					langs[langDetection.language]++
+					langsTotal++
+					break
+				}
+			}
+		}
+		
+		render(view: "cataloniaTweets", model: [
+			cataloniaTweets: cataloniaTweets,
+			cataloniaTweetsCount: cataloniaTweets.size(),
+			geoTweetsCount: geoTweets.size(),
+			langs: langs,
+			langsTotal: langsTotal
+			])
+	}
+	
+	def getTrends() {
+		Twitter twitter = new TwitterFactory().getInstance();
+		ResponseList<Location> locations;
+		locations = twitter.getAvailableTrends();
+		System.out.println("Showing available trends");
+		for (Location location : locations) {
+			System.out.println(location.getName() + " (woeid:" + location.getWoeid() + ")");
+			
+			Trends trends = twitter.getPlaceTrends(location.getWoeid());
+			for (int i = 0; i < trends.getTrends().length; i++) {
+				System.out.println("\t" + trends.getTrends()[i].getName());
+			}
+		}
+		
+		
+		
+		render ""
+	}
+	
+	def geocodings() {
+		def geocodings = TwitterGeocoding.list()
+		
+		render(view: "geocodings", model: [geocodings: geocodings])
 	}
 }

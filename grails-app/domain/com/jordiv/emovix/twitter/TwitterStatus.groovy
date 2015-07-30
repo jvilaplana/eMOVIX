@@ -29,6 +29,8 @@ class TwitterStatus {
 	Boolean isRetweet
 	Boolean isRetweeted
 	Boolean isTruncated
+	/** Source box of this tweet (worldBox, catBox, ukBox, ... */
+	Integer sourceBox
 	
 	static hasMany = [
 		contributors: Long,
@@ -61,5 +63,6 @@ class TwitterStatus {
 		text nullable: false
 		twitterUser nullable: false
 		isPossiblySensitive nullable: true
+		sourceBox nullable: true
     }
 }

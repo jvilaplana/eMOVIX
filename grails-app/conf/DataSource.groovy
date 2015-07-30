@@ -2,7 +2,7 @@ dataSource {
     pooled = true
     jmxExport = true
     driverClassName = 'com.mysql.jdbc.Driver'
-    url = 'jdbc:mysql://localhost:3306/emovix_project?autoreconnect=true'
+    url = 'jdbc:mysql://localhost:3306/emovix_project2?autoreconnect=true'
     username = "root"
     password = ""
 }

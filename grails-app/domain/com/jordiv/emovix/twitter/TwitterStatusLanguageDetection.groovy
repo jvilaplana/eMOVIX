@@ -3,7 +3,7 @@ package com.jordiv.emovix.twitter
 class TwitterStatusLanguageDetection {
 	/** The detected language */
 	String language
-	/** The source of the current language detection ("tika") */
+	/** The source of the current language detection (["tika", "detectlanguage"]) */
 	String source
 	/** Tries to judge whether the identification is certain enough to be trusted.
 	 *  WARNING: Will never return true for small amount of input texts (tika) */

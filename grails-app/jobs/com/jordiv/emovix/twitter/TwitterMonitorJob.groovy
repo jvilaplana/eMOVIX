@@ -10,6 +10,7 @@ class TwitterMonitorJob {
 	// Limit: 180 requests cada 898 segons --> 1 request cada 5 segons
 	// Affected endpoint: /users/show/:id
     def execute() {
+		return
         // execute job
 		def twitterMonitorUserList = TwitterMonitorUser.list(sort: "lastUpdated", max: 1)
 		

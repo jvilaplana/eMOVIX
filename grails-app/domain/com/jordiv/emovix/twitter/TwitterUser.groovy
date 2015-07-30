@@ -25,6 +25,8 @@ class TwitterUser {
 	Boolean isGeoEnabled
 	Boolean isProtected
 	Boolean isVerified
+	/** Coordinates obtained from the location of the user */
+	TwitterGeocoding geocoding
 	
 	static hasMany = [snapshots: TwitterUserSnapshot]
 	
@@ -33,6 +35,7 @@ class TwitterUser {
 		userId unique: true
 		timeZone nullable: true, blank: true
 		url nullable: true, blank: true
+		geocoding nullable: true
     }
 	
 	
