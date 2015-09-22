@@ -42,7 +42,7 @@ class CustomStatusListener implements StatusListener {
 		def twitterService = ctx.twitterService
 		
 		TwitterStatus twitterStatus = twitterService.saveTwitterStatus(status)
-		twitterService.detectLanguage(twitterStatus)
+		//twitterService.detectLanguage(twitterStatus)
 	}
 
 	@Override

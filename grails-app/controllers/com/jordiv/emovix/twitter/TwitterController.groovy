@@ -43,6 +43,23 @@ class TwitterController {
 		render(view: "index", model: [rateLimits: rateLimits])
 	}
 	
+	def dashboard() {
+		
+		def twitterStatusCount = TwitterStatus.mongo.count()
+		
+		//def twitterStatusWithLanguageCount = TwitterStatus.mongo.where { languageDetections.size() != 0 }.count()
+		def query = TwitterStatus.mongo.withCriteria{
+			"languageDetections.size()" == 0
+			}
+		
+		def twitterStatusWithLanguageCount = TwitterStatus.mongo.findAllByIsAutoLanguageDetected(true).size()
+		
+		
+		render(view: "dashboard", model: [
+			twitterStatusCount: twitterStatusCount,
+			twitterStatusWithLanguageCount: twitterStatusWithLanguageCount])
+	}
+	
 	def search() {
 	
 		render(view: "search", model: [])

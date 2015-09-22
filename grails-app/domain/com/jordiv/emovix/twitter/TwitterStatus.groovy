@@ -32,6 +32,10 @@ class TwitterStatus {
 	/** Source box of this tweet (worldBox, catBox, ukBox, ... */
 	Integer sourceBox
 	
+	Boolean isAutoLanguageDetected = false
+	
+	static embedded = ['languageDetections']
+	
 	static hasMany = [
 		contributors: Long,
 		userMentions: TwitterUserMention, 

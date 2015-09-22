@@ -14,7 +14,7 @@ class TwitterGeocoding {
 	
     static constraints = {
 		location nullable: false, unique: true
-		latitude nullable: false
-		longitude nullable: false
+		latitude nullable: true
+		longitude nullable: true
     }
 }

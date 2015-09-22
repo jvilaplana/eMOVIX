@@ -1,3 +1,39 @@
+grails {
+	mongo {
+		//connectionString = "mongodb://emovix:em0v1x@localhost/emovix"
+		host = "localhost"
+		port = 27017
+		//username = "admin"
+		//password = "whyn0t"
+		databaseName = "emovix"
+	}
+}
+/*
+environments {
+	development {
+	grails{
+	mongo{
+	host ="localhost"
+	port ="27017"
+	databaseName ="dev"
+	}
+	}
+	
+	}
+	
+	test {
+	grails{
+	mongo{
+	host ="localhost"
+	port ="27017"
+	databaseName ="test"
+	}
+	}
+	}
+	}
+	
+	*/
+
 dataSource {
     pooled = true
     jmxExport = true

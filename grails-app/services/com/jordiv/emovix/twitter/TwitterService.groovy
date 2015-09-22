@@ -88,82 +88,33 @@ class TwitterService {
 			twitterUser.isProtected = user.isProtected()
 			twitterUser.isVerified = user.isVerified()
 			
-			twitterUser.save flush: true, failOnError: true
+			//twitterUser.save flush: true, failOnError: true
+			twitterUser.mongo.save()
 			
-			def geocoding = TwitterGeocoding.findByLocation(twitterUser.location)
+			//def geocoding = TwitterGeocoding.findByLocation(twitterUser.location)
+			def geocoding = TwitterGeocoding.mongo.findByLocation(twitterUser.location)
 			if(geocoding == null) {
 				
-				def latLong = getGeocoding(twitterUser.location)
+				//def latLong = getGeocoding(twitterUser.location)
 				
-				if(latLong != -1) {
+				//if(latLong != -1) {
 					geocoding = new TwitterGeocoding()
 					geocoding.location = twitterUser.location
-					geocoding.longitude = latLong.longitude
-					geocoding.latitude = latLong.latitude
+					geocoding.longitude = null
+					geocoding.latitude = null
+					//geocoding.longitude = latLong.longitude
+					//geocoding.latitude = latLong.latitude
 					geocoding.addToUsers(twitterUser)
 					
-					geocoding.save flush: true, failOnError: true
-				}
+					//geocoding.save flush: true, failOnError: true
+					geocoding.mongo.save()
+				//}
 				
 			}
 			
 			twitterUser.geocoding = geocoding
-			twitterUser.save flush: true, failOnError: true
-		}
-		
-		return twitterUser
-	}
-	
-	def getUser(User user) {
-		TwitterUser twitterUser = TwitterUser.findByScreenName(user.getScreenName())
-		
-		if(twitterUser != null) return twitterUser
-		
-		if(user != null) {
-			twitterUser = new TwitterUser()
-			twitterUser.biggerProfileImageURL = user.getBiggerProfileImageURL()
-			twitterUser.biggerProfileImageURLHttps = user.getBiggerProfileImageURLHttps()
-			twitterUser.createdAt = user.getCreatedAt()
-			twitterUser.description = user.getDescription()
-			twitterUser.favouritesCount = user.getFavouritesCount()
-			twitterUser.followersCount = user.getFollowersCount()
-			twitterUser.friendsCount = user.getFriendsCount()
-			twitterUser.userId = user.getId()
-			twitterUser.lang = user.getLang()
-			twitterUser.location = user.getLocation()
-			twitterUser.miniprofileImageURL = user.getMiniProfileImageURL()
-			twitterUser.miniProfileImageURLHttps = user.getMiniProfileImageURLHttps()
-			twitterUser.name = user.getName()
-			twitterUser.screenName = user.getScreenName()
-			twitterUser.statusesCount = user.getStatusesCount()
-			twitterUser.timeZone = user.getTimeZone()
-			twitterUser.url = user.getURL()
-			twitterUser.isDefaultProfile = user.isDefaultProfile()
-			twitterUser.isDefaultProfileImage = user.isDefaultProfileImage()
-			twitterUser.isGeoEnabled = user.isGeoEnabled()
-			twitterUser.isProtected = user.isProtected()
-			twitterUser.isVerified = user.isVerified()
-			
-			twitterUser.save flush: true, failOnError: true
-			
-			def geocoding = TwitterGeocoding.findByLocation(twitterUser.location)
-			if(geocoding == null) {
-				
-				def latLong = getGeocoding(twitterUser.location)
-				
-				if(latLong != -1) {
-					geocoding = new TwitterGeocoding()
-					geocoding.location = twitterUser.location
-					geocoding.longitude = latLong.longitude
-					geocoding.latitude = latLong.latitude
-					geocoding.addToUsers(twitterUser)
-					
-					geocoding.save flush: true, failOnError: true
-				}
-			}
-			
-			twitterUser.geocoding = geocoding
-			twitterUser.save flush: true, failOnError: true
+			//twitterUser.save flush: true, failOnError: true
+			twitterUser.mongo.save()
 		}
 		
 		return twitterUser
@@ -207,10 +158,12 @@ class TwitterService {
 			userSnapshot.isProtected = user.isProtected()
 			userSnapshot.isVerified = user.isVerified()
 			userSnapshot.user = twitterUser
-			userSnapshot.save flush: true, failOnError: true
+			//userSnapshot.save flush: true, failOnError: true
+			userSnapshot.mongo.save()
 			
 			twitterUser.snapshots.add userSnapshot
-			twitterUser.save flush: true, failOnError: true
+			//twitterUser.save flush: true, failOnError: true
+			twitterUser.mongo.save()
 		}
 		
 		return userSnapshot
@@ -252,7 +205,7 @@ class TwitterService {
 	def saveTwitterStatus(Status status) {
 		//println "Saving a tweet from " + status.getUser().getScreenName()
 		// Check if this tweet already exists in the database
-		TwitterStatus twitterStatus = TwitterStatus.findByStatusId(status.getId())
+		TwitterStatus twitterStatus = TwitterStatus.mongo.findByStatusId(status.getId())
 		if(twitterStatus != null) return
 		
 		if(status.getText().size() > 255) {
@@ -269,7 +222,7 @@ class TwitterService {
 		if(status.getGeoLocation() != null) {
 			twitterStatus.geoLocation = new TwitterGeoLocation(
 				latitude: status.getGeoLocation().getLatitude(),
-				longitude: status.getGeoLocation().getLongitude()).save(flush: true)
+				longitude: status.getGeoLocation().getLongitude()).mongo.save(flush: true)
 		}
 		
 		twitterStatus.statusId = status.getId()
@@ -284,7 +237,7 @@ class TwitterService {
 		//TODO save twitterStatus.retweetedStatus
 		
 		if(status.getScopes() != null) {
-			twitterStatus.scopes = new TwitterScopes(placeIds: status.getScopes().getPlaceIds()).save(flush: true)
+			twitterStatus.scopes = new TwitterScopes(placeIds: status.getScopes().getPlaceIds()).mongo.save(flush: true)
 		}
 		
 		twitterStatus.source = status.getSource()
@@ -292,10 +245,10 @@ class TwitterService {
 		
 		if(this.isCachedUser(status.getUser().getId())) {
 			//println "User " + status.getUser().getScreenName() + " is cached, saving to status..."
-			twitterStatus.twitterUser = TwitterUser.findByUserId(status.getUser().getId())
+			twitterStatus.twitterUser = TwitterUser.mongo.findByUserId(status.getUser().getId())
 		}
 		else {
-			twitterStatus.twitterUser = this.getUser(status.getUser())
+			twitterStatus.twitterUser = this.getUser(status.getUser().getScreenName())
 		}
 		
 		twitterStatus.withheldInCountries = status.getWithheldInCountries()
@@ -305,7 +258,8 @@ class TwitterService {
 		twitterStatus.isRetweeted = status.isRetweeted()
 		twitterStatus.isTruncated = status.isTruncated()
 		
-		twitterStatus.save flush: true, failOnError: true
+		//twitterStatus.save flush: true, failOnError: true
+		twitterStatus.mongo.save()
 		
 		return twitterStatus
 	}
@@ -383,7 +337,7 @@ class TwitterService {
 		iberia[1][1] = 45
 		
 		
-		filterQuery.locations(catBox)
+		filterQuery.locations(worldBox)
 		twitterStream.filter(filterQuery)
 		
 		println "[OK]"
@@ -410,7 +364,9 @@ class TwitterService {
 		languageDetection.source = "tika"
 		languageDetection.language = li.getLanguage()
 		languageDetection.isReasonablyCertain = li.isReasonablyCertain()
-		languageDetection.save flush: true, failOnError: true
+		
+		languageDetection.mongo.save()
+		//languageDetection.save flush: true, failOnError: true
 		
 		if(languageDetection.language == "ca") {
 			// Language detection using Detect Language API
@@ -425,7 +381,8 @@ class TwitterService {
 				languageDetection.language = result.language
 				languageDetection.isReasonablyCertain = result.isReliable
 				languageDetection.confidence = result.confidence
-				languageDetection.save flush: true, failOnError: true
+				//languageDetection.save flush: true, failOnError: true
+				languageDetection.mongo.save()
 			}
 		}
 	}
@@ -434,7 +391,8 @@ class TwitterService {
 		if(location == null || location.equals("")) return [latitude: -180, longitude: -90]
 		
 		def rest = new RestBuilder()
-		def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address?key=Fmjtd%7Cluub2g0tng%2Cb2%3Do5-9ubxhz&callback=renderGeocode&location=" + location + "&outFormat=csv&thumbMaps=false&maxResults=1")
+		//def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address?key=Fmjtd%7Cluub2g0tng%2Cb2%3Do5-9ubxhz&callback=renderGeocode&location=" + location + "&outFormat=csv&thumbMaps=false&maxResults=1")
+		def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address?key=rV9y5rZVwaWwYwFWA4pOj2IkuvXsoC0u&callback=renderGeocode&location=" + location + "&outFormat=csv&thumbMaps=false&maxResults=1")
 		
 		/*def resp = rest.get("http://open.mapquestapi.com/geocoding/v1/address=key=Fmjtd|luub2g0tng,b2=o5-9ubxhz") {
 			json {
